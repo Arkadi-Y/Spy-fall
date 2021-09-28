@@ -144,6 +144,7 @@ public class GameScreen extends AppCompatActivity {
         getLocation(host.roomCode);
         RoleText.setText(host.role);
         LocationTxt.setText(location);
+
     }
     public void getLocation(String roomCode){
             FirebaseDatabase database = FirebaseDatabase.getInstance();

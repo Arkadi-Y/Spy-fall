@@ -215,17 +215,21 @@ public class Lobby extends AppCompatActivity {
     }
     void listenToRoleChange(String roomCode){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference playerRef = database.getReference("rooms/" + roomCode + "/players/"+player.name);
+        DatabaseReference playerRef = database.getReference("/rooms/" + roomCode + "/players");
         playerRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.getChildren().toString().equals(player.name)){
-                        Intent intent = new Intent(getApplicationContext(),GameScreen.class);
-                        player.setRole(snapshot.getValue().toString());
-                        intent.putExtra("Player",player);
-                        Log.d("changed",snapshot.getValue().toString());
-                        startActivity(intent);
-                    }
+                 for(DataSnapshot data: snapshot.getChildren()) {
+                     Log.d("snapshot",data.getKey() +" VS "+player.name);
+                     if (data.getKey().equals(player.name)&&!data.getValue().toString().equals("null")) {
+                         Log.d("in if",data.getKey() +" VS "+player.name);
+                         Intent intent = new Intent(getApplicationContext(), GameScreen.class);
+                         player.setRole(data.getValue().toString());
+                         intent.putExtra("Player", player);
+                         Log.d("changed", data.getValue().toString());
+                         startActivity(intent);
+                     }
+                 }
                 }
 
             @Override

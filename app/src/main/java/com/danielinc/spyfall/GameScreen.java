@@ -173,5 +173,8 @@ public class GameScreen extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
 
+    }
 }

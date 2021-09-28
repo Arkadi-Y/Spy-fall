@@ -31,7 +31,6 @@ public class Lobby extends AppCompatActivity {
     Intent intent;
     Player player;
     Host host;
-    String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,8 +149,11 @@ public class Lobby extends AppCompatActivity {
         }
     public void instantKick(int i){
         //removing players here
+        CRUD.removePlayer(host.roomCode,playerList.get(i).getName());
         playerList.remove(i);
-        //create crud kick
+        setPlayerList(playerList);
+        setList();
+        reSetList();
         adapter.notifyDataSetChanged();
     }
     public void setPlayerList(ArrayList<Player>list){
@@ -188,7 +190,6 @@ public class Lobby extends AppCompatActivity {
                 setList();
                 reSetList();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 throw error.toException();

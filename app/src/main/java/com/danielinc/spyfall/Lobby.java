@@ -13,7 +13,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,6 +30,7 @@ public class Lobby extends AppCompatActivity {
     Intent intent;
     Player player;
     Host host;
+    String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,11 +149,8 @@ public class Lobby extends AppCompatActivity {
         }
     public void instantKick(int i){
         //removing players here
-        CRUD.removePlayer(host.roomCode,playerList.get(i).getName());
         playerList.remove(i);
-        setPlayerList(playerList);
-        setList();
-        reSetList();
+        //create crud kick
         adapter.notifyDataSetChanged();
     }
     public void setPlayerList(ArrayList<Player>list){
@@ -165,10 +162,11 @@ public class Lobby extends AppCompatActivity {
         roomRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.hasChildren()) {
-                Toast.makeText(getApplicationContext(),"Room Closed By admin",Toast.LENGTH_SHORT).show();
-                quitFunction();}
+                if(!snapshot.hasChildren())
+                    quitFunction();
+
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -190,6 +188,7 @@ public class Lobby extends AppCompatActivity {
                 setList();
                 reSetList();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 throw error.toException();

@@ -1,6 +1,8 @@
 package com.danielinc.spyfall;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -76,7 +78,17 @@ public class MainLogin extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main_login, container, false);
         setItems(view);
         setListeners();
+        CreateDefaultConfig();
         return view;
+    }
+    public void CreateDefaultConfig(){
+        Context context = this.getContext();
+        SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.sharedpref),Context.MODE_PRIVATE);
+        if(sharedPref.getAll().toString() == "{}"){
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putInt("RoundTime",5).commit();
+            editor.putInt("NumOfPlayers",7).commit();
+        }
     }
    public void setItems(View view){
        Create = view.findViewById(R.id.CreateBtn);

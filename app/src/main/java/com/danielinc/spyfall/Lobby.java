@@ -137,12 +137,18 @@ public class Lobby extends AppCompatActivity {
             }
         });
         Start.setOnClickListener(view -> {
+            if (playerList.size()<=1){
+                AlertDialog.Builder builder=new AlertDialog.Builder(this);
+                builder.setTitle("Alert");
+                builder.setMessage("No players are connected");
+                builder.show();
+            }else{
             Intent intent = new Intent(this.getApplicationContext(),GameScreen.class);
             host.newRound(this.playerList);
             CRUD.UpdatePlayerRole(this.playerList,host.roomCode);
             CRUD.setLocation(host.roomCode,host.location);
             intent.putExtra("Host",host);
-            startActivity(intent);
+            startActivity(intent);}
         });
     }
     public void setListeners(){

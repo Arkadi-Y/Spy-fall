@@ -107,6 +107,7 @@ public class MainLogin extends Fragment {
        editor.putString("username",username.getText().toString()).commit();
    }
    public void loadUsername(){
+
        SharedPreferences sharedPreferences = getActivity().getApplicationContext().getSharedPreferences(getString(R.string.sharedpref),getActivity().getApplicationContext().MODE_PRIVATE);
        username.setText(sharedPreferences.getString("username",null));
    }

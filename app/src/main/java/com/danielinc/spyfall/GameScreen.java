@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +41,7 @@ public class GameScreen extends AppCompatActivity {
     ListView LocationListView;
     String role,location;
     ArrayList<String> locations;
+    MyCountDownTimer myCountDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,10 @@ public class GameScreen extends AppCompatActivity {
 
         setup();
 
+    }
+    public void startTimer(){
+        myCountDownTimer = new MyCountDownTimer(10000, 1000);
+        myCountDownTimer.start();
     }
     public void setup(){
         PlayerCard = findViewById(R.id.playerCard);
@@ -176,5 +182,23 @@ public class GameScreen extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
+    }
+    public class MyCountDownTimer extends CountDownTimer {
+
+        public MyCountDownTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+
+            int progress = (int) (millisUntilFinished/1000);
+            Log.d("timer",Integer.toString(progress));
+        }
+
+        @Override
+        public void onFinish() {
+            finish();
+        }
     }
 }

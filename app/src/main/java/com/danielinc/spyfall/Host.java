@@ -9,6 +9,7 @@ import java.util.Random;
 public class Host implements Serializable {
     String name;
     String roomCode;
+    String role;
     String location;
     ArrayList roles;
     int locationNumber;
@@ -52,7 +53,16 @@ public class Host implements Serializable {
             }
         }
         setSpy(playerList);
+        setHostRole(playerList);
     };
+    public void setHostRole(ArrayList<Player> playerList){
+        for (Player p: playerList){
+            if(p.getName().equals(this.name)){
+                this.role=p.getRole();
+            }
+        }
+
+    }
 
     public void ReSetRoles(ArrayList<Player> playerList){
         for (Player p: playerList){
@@ -69,6 +79,7 @@ public class Host implements Serializable {
     }
 
 
-
-
+    public String getRole() {
+        return this.role;
+    }
 }

@@ -21,6 +21,7 @@ public class CRUD {
             roomRef.child("config").child("host").setValue(host);
             roomRef.child("config").child("max-players").setValue(maxPlayers);
             roomRef.child("config").child("round-time").setValue(roundTime);
+            roomRef.child("location").setValue(null);
             roomRef.child("players").child(host).setValue("null");
         }
 
@@ -183,12 +184,23 @@ public class CRUD {
                 }
             });
         }
+        static void setLocation(String roomCode,String location){
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference roomRef = database.getReference("rooms/" + roomCode+"/location");
+            roomRef.setValue(location);
+        }
         static void closeRoom(Host host){
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference roomRef = database.getReference("rooms/" + host.roomCode);
             roomRef.removeValue();
         }
-
+        static String getRoomLocation(String roomCode){
+            String location;
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference locationRef = database.getReference("/rooms"+roomCode+"/location");
+            location = locationRef.toString();
+            return location;
+        }
 }
 /*
     // Write a message to the database

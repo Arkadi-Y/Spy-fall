@@ -21,25 +21,39 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class GameScreen extends AppCompatActivity {
-    LinearLayout Player,Spy;
+    LinearLayout PlayerCard,SpyCard;
+    LocationListAdapter adapter;
     Intent intent;
     Player player;
     Host host;
     ListView LocationListView;
+    String role,location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
+        adapter = new LocationListAdapter();
         setup();
 
     }
     public void setup(){
-        Player = findViewById(R.id.playerCard);
-        Spy = findViewById(R.id.spyCard);
+        PlayerCard = findViewById(R.id.playerCard);
+        SpyCard = findViewById(R.id.spyCard);
         intent=getIntent();
         isHost();
+        selectView();
 
+
+    }
+    public void selectView(){
+        if (role.equals("Spy")) {
+            SpyCard.setVisibility(View.VISIBLE);
+            setList();
+        }
+        else {
+            PlayerCard.setVisibility(View.VISIBLE);
+        }
     }
 
     public class LocationListAdapter extends BaseAdapter {
@@ -78,6 +92,11 @@ public class GameScreen extends AppCompatActivity {
         }
 
     }
+    public void setList(){
+        LocationListView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
+
     public void isHost(){
         if(intent.getSerializableExtra("Host")!=null){
             setAdmin();
@@ -87,11 +106,16 @@ public class GameScreen extends AppCompatActivity {
     }
     public void setPlayer(){
         player= (Player) intent.getSerializableExtra("Player");
-
+        this.role = player.getRole();
+        getLocation(player.roomCode);
     }
     public void setAdmin(){
         host = (Host) intent.getSerializableExtra("Host");
-
+        this.role = host.getRole();
+        getLocation(host.roomCode);
+    }
+    public void getLocation(String roomCode){
+        this.location=CRUD.getRoomLocation(roomCode);
     }
 
 

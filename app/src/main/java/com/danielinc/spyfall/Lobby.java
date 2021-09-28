@@ -90,6 +90,7 @@ public class Lobby extends AppCompatActivity {
         servCode = findViewById(R.id.ServerCodeLbl);
         Quit = findViewById(R.id.QuitBtn);
         Start = findViewById(R.id.StartBtn);
+        adapter = new MyAdapter();
         intent = getIntent();
     }
     public void isHost(){
@@ -103,7 +104,7 @@ public class Lobby extends AppCompatActivity {
         player= (Player) intent.getSerializableExtra("Player");
         UNlbl.setText(getString(R.string.hostname)+" "+player.name);
         servCode.setText(getString(R.string.servercode)+" "+player.roomCode);
-        adapter = new MyAdapter();
+
         setListeners();
     }
     public void setAdmin(){
@@ -111,7 +112,6 @@ public class Lobby extends AppCompatActivity {
         host.LoadGame();
         UNlbl.setText(getString(R.string.hostname)+" "+host.name);
         servCode.setText(getString(R.string.servercode)+" "+host.roomCode);
-        adapter = new MyAdapter();
         setHostListeners();
     }
     public void setList(){
@@ -138,6 +138,7 @@ public class Lobby extends AppCompatActivity {
             Intent intent = new Intent(this.getApplicationContext(),GameScreen.class);
             host.newRound(this.playerList);
             CRUD.UpdatePlayerRole(this.playerList,host.roomCode);
+            CRUD.setLocation(host.roomCode,host.location);
             intent.putExtra("Host",host);
             startActivity(intent);
         });

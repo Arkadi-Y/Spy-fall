@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -162,11 +163,10 @@ public class Lobby extends AppCompatActivity {
         roomRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.hasChildren())
-                    quitFunction();
-
+                if(!snapshot.hasChildren()) {
+                Toast.makeText(getApplicationContext(),"Room Closed By admin",Toast.LENGTH_SHORT).show();
+                quitFunction();}
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 

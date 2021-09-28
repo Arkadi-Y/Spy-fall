@@ -87,7 +87,6 @@ public class MainLogin extends Fragment {
    }
    public void joinFunction(){
        Intent intent = new Intent(getActivity().getApplicationContext(),Lobby.class);
-
        String userName = username.getText().toString();
        String Code = roomCode.getText().toString();
        final boolean[] exists = {false};

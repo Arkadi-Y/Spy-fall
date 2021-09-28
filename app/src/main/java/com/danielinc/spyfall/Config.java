@@ -78,7 +78,6 @@ public class Config extends Fragment {
     TextView AmountTxt;
     Button Update;
     private void functionality(View view) {
-
         Update = view.findViewById(R.id.UpdateNOP);
         AmountTxt = view.findViewById(R.id.AmountTxt);
         spinner = view.findViewById(R.id.spinner);

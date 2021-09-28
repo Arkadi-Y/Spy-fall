@@ -110,10 +110,6 @@ public class CRUD {
             });
             return exists[0];
         }
-
-        static void SetPlayers(String [][] players){
-
-        }
         static void UpdatePlayerRole(ArrayList<Player> playerList,String roomCode){
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference playerRef = database.getReference("/rooms/"+roomCode+"/players");
@@ -169,7 +165,7 @@ public class CRUD {
             return playerList;
 
         }
-         public static void roleChangeListener(Player player, String code){
+        public static void roleChangeListener(Player player, String code){
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference playerRef = database.getReference("rooms/" + code + "/players/"+player.name);
             playerRef.addValueEventListener(new ValueEventListener() {

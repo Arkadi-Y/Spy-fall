@@ -78,7 +78,6 @@ public class MainLogin extends Fragment {
         setListeners();
         return view;
     }
-
    public void setItems(View view){
        Create = view.findViewById(R.id.CreateBtn);
        Join = view.findViewById(R.id.LoginBtn);

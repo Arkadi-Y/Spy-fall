@@ -134,17 +134,12 @@ public class Lobby extends AppCompatActivity {
             }
         });
         Start.setOnClickListener(view -> {
-<<<<<<< Updated upstream
             host.startGame();
             Intent intent = new Intent(this.getApplicationContext(),GameScreen.class);
             host.setRoles(playerList);
-            intent.putExtra("playerList",playerList);
-=======
-            Intent intent = new Intent(getApplicationContext(),GameScreen.class);
             host.newRound(this.playerList);
             CRUD.UpdatePlayerRole(this.playerList,host.roomCode);
             intent.putExtra("Host",host);
->>>>>>> Stashed changes
             startActivity(intent);
         });
     }
@@ -180,9 +175,7 @@ public class Lobby extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(!snapshot.hasChildren())
                     quitFunction();
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 

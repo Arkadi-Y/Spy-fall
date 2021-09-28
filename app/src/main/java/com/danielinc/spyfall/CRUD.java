@@ -73,10 +73,8 @@ public class CRUD {
             locationRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    int index = 0;
                     for(DataSnapshot data: snapshot.getChildren()){
-                        locations.add(data.child(Integer.toString(index)).child("title").getValue().toString());
-                        index++;
+                        locations.add(data.child("title").getValue().toString());
                     }
                 }
                 @Override

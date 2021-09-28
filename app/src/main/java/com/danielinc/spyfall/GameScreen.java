@@ -12,11 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-<<<<<<< Updated upstream
 import android.widget.LinearLayout;
-=======
 import android.widget.ListView;
->>>>>>> Stashed changes
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -24,30 +21,25 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class GameScreen extends AppCompatActivity {
-<<<<<<< Updated upstream
     LinearLayout Player,Spy;
-=======
     Intent intent;
     Player player;
     Host host;
     ListView LocationListView;
 
->>>>>>> Stashed changes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
-<<<<<<< Updated upstream
         setup();
 
     }
     public void setup(){
         Player = findViewById(R.id.playerCard);
         Spy = findViewById(R.id.spyCard);
-=======
         intent=getIntent();
         isHost();
->>>>>>> Stashed changes
+
     }
 
     public class LocationListAdapter extends BaseAdapter {

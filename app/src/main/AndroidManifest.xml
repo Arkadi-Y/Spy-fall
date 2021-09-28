@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Spyfall">
         <activity
+            android:name=".GameScreen"
+            android:exported="true" />
+        <activity
             android:name=".Lobby"
             android:exported="true" />
         <activity

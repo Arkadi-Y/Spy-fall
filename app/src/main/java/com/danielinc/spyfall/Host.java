@@ -18,12 +18,11 @@ public class Host implements Serializable {
         this.name = name;
         setRoomCode();
     }
-    public void startGame(){
+    public void LoadGame(){
         getLocation();
     }
 
     public void newRound(ArrayList<Player> playerList){
-        getLocation();
         ReSetRoles(playerList);
         setRoles(playerList);
     }
@@ -62,6 +61,7 @@ public class Host implements Serializable {
     }
     public void setSpy(ArrayList<Player> playerList){
         Random r = new Random();
+        Log.d("list size -", String.valueOf(playerList.size()));
         playerList.get(r.nextInt(playerList.size())).setRole("Spy");
     };
     public void EndGame(){

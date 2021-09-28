@@ -134,8 +134,9 @@ public class CRUD {
             locationRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for(DataSnapshot roleSnap : snapshot.getChildren())
-                        roles.add(roleSnap);
+                    for(DataSnapshot roleSnap : snapshot.getChildren()) {
+                        roles.add(roleSnap.getValue().toString());
+                    }
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {

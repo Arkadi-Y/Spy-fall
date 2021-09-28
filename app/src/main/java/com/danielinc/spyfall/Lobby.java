@@ -108,6 +108,7 @@ public class Lobby extends AppCompatActivity {
     }
     public void setAdmin(){
         host = (Host) intent.getSerializableExtra("Host");
+        host.LoadGame();
         UNlbl.setText(getString(R.string.hostname)+" "+host.name);
         servCode.setText(getString(R.string.servercode)+" "+host.roomCode);
         adapter = new MyAdapter();
@@ -134,9 +135,7 @@ public class Lobby extends AppCompatActivity {
             }
         });
         Start.setOnClickListener(view -> {
-            host.startGame();
             Intent intent = new Intent(this.getApplicationContext(),GameScreen.class);
-            host.setRoles(playerList);
             host.newRound(this.playerList);
             CRUD.UpdatePlayerRole(this.playerList,host.roomCode);
             intent.putExtra("Host",host);

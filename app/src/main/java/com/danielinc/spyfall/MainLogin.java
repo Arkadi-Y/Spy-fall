@@ -139,7 +139,6 @@ public class MainLogin extends Fragment {
            Host host = new Host(username.getText().toString());
            //TODO: creating server in firebase here
            CRUD.CreateRoom(host.roomCode,host.name,7,3);
-           host.startGame();
            intent.putExtra("Host",host);
            startActivity(intent);
        }

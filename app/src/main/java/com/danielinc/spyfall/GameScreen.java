@@ -7,16 +7,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class GameScreen extends AppCompatActivity {
-
+    LinearLayout Player,Spy;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
+        setup();
+
+    }
+    public void setup(){
+        Player = findViewById(R.id.playerCard);
+        Spy = findViewById(R.id.spyCard);
     }
 /*
     public class MyAdapter extends BaseAdapter {

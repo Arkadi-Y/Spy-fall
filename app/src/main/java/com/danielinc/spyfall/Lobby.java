@@ -2,6 +2,7 @@ package com.danielinc.spyfall;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,7 +32,6 @@ public class Lobby extends AppCompatActivity {
     Player player;
     Host host;
     String userName;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +44,7 @@ public class Lobby extends AppCompatActivity {
     }
     public class MyAdapter extends BaseAdapter {
         ArrayList<Player> items;
+
         MyAdapter() {
             this.items = playerList;
         }
@@ -85,7 +86,7 @@ public class Lobby extends AppCompatActivity {
         UNlbl = findViewById(R.id.usernamelbl);
         servCode = findViewById(R.id.ServerCodeLbl);
         Quit = findViewById(R.id.QuitBtn);
-        Start = findViewById(R.id.VoteBtn);
+        Start = findViewById(R.id.StartBtn);
         intent = getIntent();
     }
     public void isHost(){
@@ -133,6 +134,10 @@ public class Lobby extends AppCompatActivity {
         });
         Start.setOnClickListener(view -> {
             host.startGame();
+            Intent intent = new Intent(this.getApplicationContext(),GameScreen.class);
+            host.setRoles(playerList);
+            intent.putExtra("playerList",playerList);
+            startActivity(intent);
         });
     }
     public void setListeners(){

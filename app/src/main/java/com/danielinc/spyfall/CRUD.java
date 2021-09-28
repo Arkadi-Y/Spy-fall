@@ -4,6 +4,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,7 +23,7 @@ public class CRUD {
             roomRef.child("config").child("host").setValue(host);
             roomRef.child("config").child("max-players").setValue(maxPlayers);
             roomRef.child("config").child("round-time").setValue(roundTime);
-            roomRef.child("location").setValue(null);
+            roomRef.child("location").setValue("null");
             roomRef.child("players").child(host).setValue("null");
         }
 
@@ -121,12 +123,21 @@ public class CRUD {
             DatabaseReference playerRef = database.getReference("rooms/" + roomCode + "/players/"+name);
             playerRef.removeValue();
         }
-        static String getLocation(int locationNumber){
+        static void getLocation(int locationNumber,Host host){
             String location;
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference locationRef = database.getReference("locations/"+locationNumber+"/title");
-            location = locationRef.toString();
-            return location;
+            locationRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if (!task.isSuccessful()) {
+                        Log.e("firebase", "Error getting data", task.getException());
+                    }
+                    else {
+                        host.location=task.getResult().getValue().toString();
+                    }
+                }
+            });
         }
         static ArrayList getRoles(int locationNumber){
             ArrayList roles = new ArrayList();

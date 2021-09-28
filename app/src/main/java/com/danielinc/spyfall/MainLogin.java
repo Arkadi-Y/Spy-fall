@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
@@ -80,7 +81,7 @@ public class MainLogin extends Fragment {
         setItems(view);
         setListeners();
         CreateDefaultConfig();
-        loadLocationList();
+
         loadUsername();
         return view;
     }
@@ -168,13 +169,5 @@ public class MainLogin extends Fragment {
           });
 
    }
-   public void loadLocationList(){
-       Context context = getActivity();
-       Set<String> locations = CRUD.getLocationList();
-       SharedPreferences sharedPref = context.getSharedPreferences(
-               getString(R.string.sharedpref), Context.MODE_PRIVATE);
-       SharedPreferences.Editor editor = sharedPref.edit();
-       editor.putStringSet("Locations",locations);
-       editor.apply();
-   }
+
 }

@@ -40,7 +40,7 @@ public class Host implements Serializable {
     public void getLocation(){
         Random randomNum = new Random();
         this.locationNumber= randomNum.nextInt(49);
-        this.location=CRUD.getLocation(this.locationNumber);
+        CRUD.getLocation(this.locationNumber,this);
         this.roles = CRUD.getRoles(this.locationNumber);
     };
     public void setRoles(ArrayList<Player> playerList){

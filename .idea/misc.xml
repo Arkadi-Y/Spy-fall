@@ -3,15 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Android/Spy-fall/app/src/main/res/layout/activity_game_screen.xml" value="0.14427083333333332" />
         <entry key="..\:/Android/Spy-fall/app/src/main/res/layout/activity_lobby.xml" value="0.20833333333333334" />
         <entry key="..\:/Android/Spy-fall/app/src/main/res/layout/activity_main.xml" value="0.20833333333333334" />
         <entry key="..\:/Android/Spy-fall/app/src/main/res/layout/fragment_main_login.xml" value="0.20833333333333334" />
         <entry key="..\:/Android/Spy-fall/app/src/main/res/layout/rawdata_player.xml" value="0.21197916666666666" />
-        <entry key="..\:/OneDrive/android project/Spy-fall/app/src/main/res/layout/activity_game_screen.xml" value="0.20520833333333333" />
-        <entry key="..\:/OneDrive/android project/Spy-fall/app/src/main/res/layout/activity_lobby.xml" value="0.36666666666666664" />
-        <entry key="..\:/OneDrive/android project/Spy-fall/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
-        <entry key="..\:/OneDrive/android project/Spy-fall/app/src/main/res/layout/fragment_config.xml" value="0.36666666666666664" />
-        <entry key="..\:/OneDrive/android project/Spy-fall/app/src/main/res/layout/rawdata_location.xml" value="0.20520833333333333" />
         <entry key="..\:/OneDrive/android project/project/app/src/main/res/layout/activity_lobby.xml" value="0.36666666666666664" />
         <entry key="..\:/OneDrive/android project/project/app/src/main/res/layout/activity_main.xml" value="0.14606741573033707" />
         <entry key="..\:/OneDrive/android project/project/app/src/main/res/layout/fragment_config.xml" value="0.20520833333333333" />

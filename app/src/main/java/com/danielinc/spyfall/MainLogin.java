@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -79,9 +80,10 @@ public class MainLogin extends Fragment {
         setItems(view);
         setListeners();
         CreateDefaultConfig();
+        loadLocationList();
         return view;
     }
-    public void CreateDefaultConfig(){
+   public void CreateDefaultConfig(){
         Context context = this.getContext();
         SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.sharedpref),Context.MODE_PRIVATE);
         if(sharedPref.getAll().toString() == "{}"){
@@ -153,5 +155,14 @@ public class MainLogin extends Fragment {
            joinFunction();
           });
 
+   }
+   public void loadLocationList(){
+       Context context = getActivity();
+       Set<String> locations = CRUD.getLocationList();
+       SharedPreferences sharedPref = context.getSharedPreferences(
+               getString(R.string.sharedpref), Context.MODE_PRIVATE);
+       SharedPreferences.Editor editor = sharedPref.edit();
+       editor.putStringSet("Locations",locations);
+       editor.apply();
    }
 }

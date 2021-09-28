@@ -1,51 +1,77 @@
 package com.danielinc.spyfall;
 
+import static java.security.AccessController.getContext;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+<<<<<<< Updated upstream
 import android.widget.LinearLayout;
+=======
+import android.widget.ListView;
+>>>>>>> Stashed changes
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class GameScreen extends AppCompatActivity {
+<<<<<<< Updated upstream
     LinearLayout Player,Spy;
+=======
+    Intent intent;
+    Player player;
+    Host host;
+    ListView LocationListView;
+
+>>>>>>> Stashed changes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
+<<<<<<< Updated upstream
         setup();
 
     }
     public void setup(){
         Player = findViewById(R.id.playerCard);
         Spy = findViewById(R.id.spyCard);
+=======
+        intent=getIntent();
+        isHost();
+>>>>>>> Stashed changes
     }
-/*
-    public class MyAdapter extends BaseAdapter {
-        ArrayList<String> items;
-        MyAdapter() {
-            //arraylist here
-            this.items = null;
+
+    public class LocationListAdapter extends BaseAdapter {
+        String [] locations;
+        Set<String> items = new HashSet<>();
+        LocationListAdapter() {
+            SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE) ;
+            items = sharedPref.getStringSet("Locations", items);
+            locations = (String[]) items.toArray();
         }
 
         @Override
         public int getCount() {
-            return items.size();
+            return this.locations.length;
         }
 
         @Override
-        public Object getItem(int i) {
-            return items.get(i);
+        public String getItem(int i) {
+            return this.locations[i];
         }
 
         @Override
         public long getItemId(int i) {
-            return i;
+            return 0;
         }
 
         @Override
@@ -54,24 +80,27 @@ public class GameScreen extends AppCompatActivity {
             View view1 = Linflater.inflate(R.layout.rawdata_location, null);
             TextView LocationName = view1.findViewById(R.id.LocationName);
             //שולף מתוך הרשימה
-            LocationName.setText(items.get(i).getName());
-
+            LocationName.setText(locations[i]);
             //Desc.setText(Double.toString(items.get(i).getAnswer()));
             return view1;
         }
 
-        public void setItems(ArrayList<Player> items) {
-            this.items = items;
+    }
+    public void isHost(){
+        if(intent.getSerializableExtra("Host")!=null){
+            setAdmin();
+        }else{
+            setPlayer();
         }
     }
+    public void setPlayer(){
+        player= (Player) intent.getSerializableExtra("Player");
 
-    public void reSetList(){
-        adapter.setItems(playerList);
+    }
+    public void setAdmin(){
+        host = (Host) intent.getSerializableExtra("Host");
+
     }
 
-    public void setList(){
-        PlayerListView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-    }
-*/
+
 }

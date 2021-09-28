@@ -1,9 +1,12 @@
 package com.danielinc.spyfall;
+import static java.security.AccessController.getContext;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -102,8 +105,6 @@ public class Lobby extends AppCompatActivity {
         servCode.setText(getString(R.string.servercode)+" "+player.roomCode);
         adapter = new MyAdapter();
         setListeners();
-        listenToConnectingPlayers(player.roomCode);
-        listenToRoom(player.roomCode);
     }
     public void setAdmin(){
         host = (Host) intent.getSerializableExtra("Host");
@@ -111,13 +112,13 @@ public class Lobby extends AppCompatActivity {
         servCode.setText(getString(R.string.servercode)+" "+host.roomCode);
         adapter = new MyAdapter();
         setHostListeners();
-        listenToConnectingPlayers(host.roomCode);
     }
     public void setList(){
         PlayerListView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
     public void setHostListeners(){
+        listenToConnectingPlayers(host.roomCode);
         PlayerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -133,10 +134,17 @@ public class Lobby extends AppCompatActivity {
             }
         });
         Start.setOnClickListener(view -> {
+<<<<<<< Updated upstream
             host.startGame();
             Intent intent = new Intent(this.getApplicationContext(),GameScreen.class);
             host.setRoles(playerList);
             intent.putExtra("playerList",playerList);
+=======
+            Intent intent = new Intent(getApplicationContext(),GameScreen.class);
+            host.newRound(this.playerList);
+            CRUD.UpdatePlayerRole(this.playerList,host.roomCode);
+            intent.putExtra("Host",host);
+>>>>>>> Stashed changes
             startActivity(intent);
         });
     }
@@ -148,6 +156,9 @@ public class Lobby extends AppCompatActivity {
                     quitFunction();
                 }
             });
+        listenToConnectingPlayers(player.roomCode);
+        listenToRoom(player.roomCode);
+        listenToRoleChane(player.roomCode);
         }
     public void quitFunction(){
          finish();
@@ -192,8 +203,31 @@ public class Lobby extends AppCompatActivity {
                 setPlayerList(newList);
                 setList();
                 reSetList();
+
             }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                throw error.toException();
+            }
+        });
+    }
+    void listenToRoleChane(String roomCode){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference playerRef = database.getReference("rooms/" + roomCode + "/players/"+player.name);
+        playerRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot roleSnap : snapshot.getChildren()){
+                    if (roleSnap.getKey().equals(player.name)){
+                        Intent intent = new Intent(getApplicationContext(),GameScreen.class);
+                        player.setRole(roleSnap.getValue().toString());
+                        intent.putExtra("Player",player);
+                        Log.d("changed",roleSnap.getValue().toString());
+                        startActivity(intent);
+                    }
+                }
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 throw error.toException();

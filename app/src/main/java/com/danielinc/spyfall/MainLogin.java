@@ -81,6 +81,7 @@ public class MainLogin extends Fragment {
         setListeners();
         CreateDefaultConfig();
         loadLocationList();
+        loadUsername();
         return view;
     }
    public void CreateDefaultConfig(){
@@ -99,12 +100,22 @@ public class MainLogin extends Fragment {
        username = view.findViewById(R.id.UsernameTxt);
        username.setText("");
    }
+   public void saveUsername(){
+       SharedPreferences sharedPreferences = getActivity().getApplicationContext().getSharedPreferences(getString(R.string.sharedpref),getActivity().getApplicationContext().MODE_PRIVATE);
+       SharedPreferences.Editor editor = sharedPreferences.edit();
+       editor.putString("username",username.getText().toString()).commit();
+   }
+   public void loadUsername(){
+       SharedPreferences sharedPreferences = getActivity().getApplicationContext().getSharedPreferences(getString(R.string.sharedpref),getActivity().getApplicationContext().MODE_PRIVATE);
+       username.setText(sharedPreferences.getString("username",null));
+   }
    public void joinFunction(){
        Intent intent = new Intent(getActivity().getApplicationContext(),Lobby.class);
        String userName = username.getText().toString();
        String Code = roomCode.getText().toString();
        final boolean[] exists = {false};
        if(userName.length()>3) {
+           saveUsername();
            FirebaseDatabase database = FirebaseDatabase.getInstance();
            DatabaseReference roomRef = database.getReference("/rooms");;
            roomRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -134,8 +145,10 @@ public class MainLogin extends Fragment {
        }else{ Toast.makeText(getActivity().getApplicationContext(),getString(R.string.UsernameAlert) ,Toast.LENGTH_SHORT).show(); }
    }
    public void createFunction(){
+
        Intent intent = new Intent(getActivity().getApplicationContext(),Lobby.class);
        if(username.getText().toString().length()>3){
+           saveUsername();
            Host host = new Host(username.getText().toString());
            //TODO: creating server in firebase here
            CRUD.CreateRoom(host.roomCode,host.name,7,3);

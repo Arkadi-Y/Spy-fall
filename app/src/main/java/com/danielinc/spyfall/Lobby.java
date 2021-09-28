@@ -138,7 +138,6 @@ public class Lobby extends AppCompatActivity {
         player= (Player) intent.getSerializableExtra("Player");
         UNlbl.setText(getString(R.string.hostname)+" "+player.name);
         servCode.setText(getString(R.string.servercode)+" "+player.roomCode);
-
         setListeners();
     }
     public void setAdmin(){

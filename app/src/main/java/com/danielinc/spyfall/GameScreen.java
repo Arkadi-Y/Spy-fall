@@ -227,5 +227,6 @@ public class GameScreen extends AppCompatActivity {
         public void onFinish() {
             finish();
         }
+
     }
 }

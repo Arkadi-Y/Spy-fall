@@ -36,7 +36,7 @@ import java.util.Set;
 public class GameScreen extends AppCompatActivity {
     LinearLayout PlayerCard,SpyCard;
     LocationListAdapter adapter;
-    TextView LocationTxt,RoleText;
+    TextView LocationTxt,RoleText,Timer;
     Intent intent;
     Player player;
     Host host;
@@ -44,20 +44,30 @@ public class GameScreen extends AppCompatActivity {
     String role,location;
     ArrayList<String> locations;
     MyCountDownTimer myCountDownTimer;
-
+    int ConfigTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
 
         setup();
+        startTimer();
 
     }
     public void startTimer(){
-        myCountDownTimer = new MyCountDownTimer(10000, 1000);
+        SharedPreferences sharedPref = this.getApplicationContext().getSharedPreferences(getString(R.string.sharedpref),Context.MODE_PRIVATE);
+
+        int CountDown = sharedPref.getInt("CurrentSessionRoundTime",1)*60*1000;
+        Log.d("Time-Set" , Integer.toString(CountDown));
+        myCountDownTimer = new MyCountDownTimer(CountDown, 1000);
         myCountDownTimer.start();
     }
+    public void stopTimer(){
+        myCountDownTimer.cancel();
+    }
     public void setup(){
+
+        Timer = findViewById(R.id.Timer);
         PlayerCard = findViewById(R.id.playerCard);
         SpyCard = findViewById(R.id.spyCard);
         intent=getIntent();
@@ -68,7 +78,6 @@ public class GameScreen extends AppCompatActivity {
         locations = new ArrayList<>();
         isHost();
         selectView();
-
 
     }
     public void selectView(){
@@ -139,6 +148,7 @@ public class GameScreen extends AppCompatActivity {
         getLocation(player.roomCode);
         RoleText.setText(player.role);
         LocationTxt.setText(location);
+
     }
     public void setAdmin(){
         host = (Host) intent.getSerializableExtra("Host");
@@ -209,9 +219,8 @@ public class GameScreen extends AppCompatActivity {
 
         @Override
         public void onTick(long millisUntilFinished) {
-
             int progress = (int) (millisUntilFinished/1000);
-            Log.d("timer",Integer.toString(progress));
+            Timer.setText(progress/60+":"+progress%60);
         }
 
         @Override

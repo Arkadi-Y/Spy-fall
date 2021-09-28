@@ -45,6 +45,7 @@ public class Lobby extends AppCompatActivity {
         playerList=new ArrayList<>();
         setItems();
         isHost();
+        getTime();
         setList();
     }
     public class MyAdapter extends BaseAdapter {
@@ -101,6 +102,37 @@ public class Lobby extends AppCompatActivity {
         }else{
             setPlayer();
         }
+    }
+    public void getTime(){
+        if(host==null){
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference locationRef = database.getReference("rooms/" + player.roomCode + "/config");
+            addPostEventListener(locationRef);
+        }
+        else{
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference locationRef = database.getReference("rooms/" + host.roomCode + "/config");
+            addPostEventListener(locationRef);
+        }
+    }
+    private void addPostEventListener(DatabaseReference mPostReference) {
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                SharedPreferences sharedPref = getApplication().getApplicationContext().getSharedPreferences(getString(R.string.sharedpref),Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                if(dataSnapshot.child("round-time").getValue()!=null){
+                    editor.putInt("CurrentSessionRoundTime",Integer.parseInt(dataSnapshot.child("round-time").getValue().toString())).commit();
+                }
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w( "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+        mPostReference.addValueEventListener(postListener);
     }
     public void setPlayer(){
         player= (Player) intent.getSerializableExtra("Player");

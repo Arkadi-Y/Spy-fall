@@ -74,14 +74,12 @@ public class Config extends Fragment {
 
     RadioButton[] radio = new RadioButton[5];
     Spinner spinner;
-    Switch switch1;
-    TextView AmountTxt;
     Button Update;
     private void functionality(View view) {
         Update = view.findViewById(R.id.UpdateNOP);
-        AmountTxt = view.findViewById(R.id.AmountTxt);
+
         spinner = view.findViewById(R.id.spinner);
-        switch1 = view.findViewById(R.id.SpyCount);
+
         radio[0] = view.findViewById(R.id.radio_3);
         radio[1] = view.findViewById(R.id.radio_4);
         radio[2] = view.findViewById(R.id.radio_5);
@@ -93,19 +91,6 @@ public class Config extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-        //changing the state of the textview from one spy to two spies
-        switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if(switch1.isChecked()){
-                    AmountTxt.setText(R.string.twospy);
-                }
-                else{
-                    AmountTxt.setText(R.string.Onespy);
-                }
-            }
-        });
-
         Update.setOnClickListener(v->{
             saveData(view);
             loadData(view);
@@ -116,20 +101,85 @@ public class Config extends Fragment {
 
     public void saveData(View view){
         Context context = view.getContext();
-        SharedPreferences sharedPref = context.getSharedPreferences("sharedPrefs",Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.sharedpref),Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt("NumOfPlayers",3);
-        editor.putBoolean("spyCount",false);
-        editor.putString("RoundTime","6:00");
-        Log.d("Log",sharedPref.getAll().toString());
+        for(RadioButton x : radio){
+            if(x.isChecked()){
+                switch (x.getText().toString()){
+                    case "3":
+                        editor.putInt("NumOfPlayers",3).commit();
+                        break;
+                    case "4":
+                        editor.putInt("NumOfPlayers",4).commit();
+                        break;
+                    case "5":
+                        editor.putInt("NumOfPlayers",5).commit();
+                        break;
+                    case "6":
+                        editor.putInt("NumOfPlayers",6).commit();
+                        break;
+                    case "7":
+                        editor.putInt("NumOfPlayers",7).commit();
+                        break;
+                }
+            }
+        }
+        switch (spinner.getSelectedItem().toString()){
+            case "6:00":
+                editor.putInt("RoundTime",6).commit();
+                break;
+            case "7:00":
+                editor.putInt("RoundTime",7).commit();
+                break;
+            case "8:00":
+                editor.putInt("RoundTime",8).commit();
+                break;
+            case "9:00":
+                editor.putInt("RoundTime",9).commit();
+                break;
+            case "10:00":
+                editor.putInt("RoundTime",10).commit();
+                break;
+        }
     }
 
     public void loadData(View view){
         Context context = view.getContext();
-        SharedPreferences sharedPref = context.getSharedPreferences("sharedPrefs",Context.MODE_PRIVATE);
-        Toast.makeText(view.getContext(), getString(R.string.sharedpref),Toast.LENGTH_SHORT);
-        AmountTxt.setText(sharedPref.getAll().toString());
-        Log.d("Log",sharedPref.getAll().toString());
+        SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.sharedpref),Context.MODE_PRIVATE);
+        switch (sharedPref.getInt("RoundTime",1)){
+            case 6:
+                spinner.setSelection(0);
+                break;
+            case 7:
+                spinner.setSelection(1);
+                break;
+            case 8:
+                spinner.setSelection(2);
+                break;
+            case 9:
+                spinner.setSelection(3);
+                break;
+            case 10:
+                spinner.setSelection(4);
+                break;
+        }
+        switch (sharedPref.getInt("NumOfPlayers",1)){
+            case 3:
+                radio[0].setChecked(true);
+                break;
+            case 4:
+                radio[1].setChecked(true);
+                break;
+            case 5:
+                radio[2].setChecked(true);
+                break;
+            case 6:
+                radio[3].setChecked(true);
+                break;
+            case 7:
+                radio[4].setChecked(true);
+                break;
+        }
     }
 
 }

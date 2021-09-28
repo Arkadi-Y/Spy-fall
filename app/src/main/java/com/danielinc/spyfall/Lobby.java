@@ -219,7 +219,7 @@ public class Lobby extends AppCompatActivity {
         playerRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.getValue().toString().equals(player.name)){
+                    if (snapshot.getChildren().toString().equals(player.name)){
                         Intent intent = new Intent(getApplicationContext(),GameScreen.class);
                         player.setRole(snapshot.getValue().toString());
                         intent.putExtra("Player",player);
@@ -227,6 +227,7 @@ public class Lobby extends AppCompatActivity {
                         startActivity(intent);
                     }
                 }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 throw error.toException();

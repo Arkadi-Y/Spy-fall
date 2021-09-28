@@ -146,13 +146,15 @@ public class MainLogin extends Fragment {
        }else{ Toast.makeText(getActivity().getApplicationContext(),getString(R.string.UsernameAlert) ,Toast.LENGTH_SHORT).show(); }
    }
    public void createFunction(){
-
+       Context context = this.getContext();
+       SharedPreferences sharedPref = context.getSharedPreferences(getString(R.string.sharedpref),Context.MODE_PRIVATE);
+       SharedPreferences.Editor editor = sharedPref.edit();
        Intent intent = new Intent(getActivity().getApplicationContext(),Lobby.class);
        if(username.getText().toString().length()>3){
            saveUsername();
            Host host = new Host(username.getText().toString());
            //TODO: creating server in firebase here
-           CRUD.CreateRoom(host.roomCode,host.name,7,3);
+           CRUD.CreateRoom(host.roomCode,host.name,sharedPref.getInt("NumOfPlayers",1),sharedPref.getInt("RoundTime",1));
            intent.putExtra("Host",host);
            startActivity(intent);
        }

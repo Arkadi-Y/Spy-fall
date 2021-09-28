@@ -93,7 +93,6 @@ public class Config extends Fragment {
 
         Update.setOnClickListener(v->{
             saveData(view);
-
         });
 
         loadData(view);

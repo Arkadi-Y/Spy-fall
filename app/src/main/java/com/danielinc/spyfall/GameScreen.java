@@ -23,6 +23,7 @@ import java.util.Set;
 public class GameScreen extends AppCompatActivity {
     LinearLayout PlayerCard,SpyCard;
     LocationListAdapter adapter;
+    TextView LocationTxt,RoleText;
     Intent intent;
     Player player;
     Host host;
@@ -41,6 +42,8 @@ public class GameScreen extends AppCompatActivity {
         PlayerCard = findViewById(R.id.playerCard);
         SpyCard = findViewById(R.id.spyCard);
         intent=getIntent();
+        LocationTxt = findViewById(R.id.LocationTxt);
+        RoleText = findViewById(R.id.RoleTxt);
         isHost();
         selectView();
 
@@ -108,11 +111,15 @@ public class GameScreen extends AppCompatActivity {
         player= (Player) intent.getSerializableExtra("Player");
         this.role = player.getRole();
         getLocation(player.roomCode);
+        RoleText.setText(player.role);
+        LocationTxt.setText(location);
     }
     public void setAdmin(){
         host = (Host) intent.getSerializableExtra("Host");
         this.role = host.getRole();
         getLocation(host.roomCode);
+        RoleText.setText(host.role);
+        LocationTxt.setText(location);
     }
     public void getLocation(String roomCode){
         this.location=CRUD.getRoomLocation(roomCode);

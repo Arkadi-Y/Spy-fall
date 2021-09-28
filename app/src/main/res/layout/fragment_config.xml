@@ -49,27 +49,8 @@
                     android:text="7"
                     android:textColor="@color/white"/>
             </RadioGroup>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
-            <Switch
-                android:id="@+id/SpyCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="48dp"
-                android:text="@string/spycount"
-                android:textColor="@color/white" />
-            <TextView
-                android:layout_marginLeft="20dp"
-                android:id="@+id/AmountTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/Onespy"/>
-        </LinearLayout>
 
-        <Spinner
+    <Spinner
             android:id="@+id/spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -161,7 +161,7 @@ public class Lobby extends AppCompatActivity {
             });
         listenToConnectingPlayers(player.roomCode);
         listenToRoom(player.roomCode);
-        listenToRoleChane(player.roomCode);
+        listenToRoleChange(player.roomCode);
         }
     public void quitFunction(){
          finish();
@@ -213,22 +213,20 @@ public class Lobby extends AppCompatActivity {
             }
         });
     }
-    void listenToRoleChane(String roomCode){
+    void listenToRoleChange(String roomCode){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference playerRef = database.getReference("rooms/" + roomCode + "/players/"+player.name);
         playerRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot roleSnap : snapshot.getChildren()){
-                    if (roleSnap.getKey().equals(player.name)){
+                    if (snapshot.getValue().toString().equals(player.name)){
                         Intent intent = new Intent(getApplicationContext(),GameScreen.class);
-                        player.setRole(roleSnap.getValue().toString());
+                        player.setRole(snapshot.getValue().toString());
                         intent.putExtra("Player",player);
-                        Log.d("changed",roleSnap.getValue().toString());
+                        Log.d("changed",snapshot.getValue().toString());
                         startActivity(intent);
                     }
                 }
-            }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 throw error.toException();

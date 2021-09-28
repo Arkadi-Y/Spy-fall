@@ -2,9 +2,11 @@ package com.danielinc.spyfall;
 import static java.security.AccessController.getContext;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -226,4 +228,49 @@ public class Lobby extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(host!=null){
+            host.EndGame();
+        }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("Pause ","HALT!!!");
+    }
+    Boolean flag=true;
+    @Override
+    public void onBackPressed() {
+        if(host!=null){
+            AlertDialog.Builder builder=new AlertDialog.Builder(this);
+            builder.setTitle("Confirmation");
+            builder.setMessage("Are you sure you want to quit");
+            builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                        host.EndGame();
+                        finish();
+                    }
+
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            }).show();
+        }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("Restart ","Reboot!!!");
+
+    }
+}

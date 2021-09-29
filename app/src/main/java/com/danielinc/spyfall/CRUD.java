@@ -23,6 +23,7 @@ public class CRUD {
             roomRef.child("config").child("host").setValue(host);
             roomRef.child("config").child("max-players").setValue(maxPlayers);
             roomRef.child("config").child("round-time").setValue(roundTime);
+            roomRef.child("status").setValue("Lobby");
             roomRef.child("location").setValue("null");
             roomRef.child("players").child(host).setValue("null");
         }
@@ -117,6 +118,16 @@ public class CRUD {
             for (Player player : playerList){
                 playerRef.child(player.name).setValue(player.role);
             }
+        }
+        static void UpdateRoomGameStart(String roomCode){
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference playerRef = database.getReference("/rooms/"+roomCode);
+            playerRef.child("status").setValue("Game");
+        }
+        static void UpdateRoomGameStop(String roomCode){
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference playerRef = database.getReference("/rooms/"+roomCode);
+            playerRef.child("status").setValue("Lobby");
         }
         static void removePlayer(String roomCode,String name){
             FirebaseDatabase database = FirebaseDatabase.getInstance();

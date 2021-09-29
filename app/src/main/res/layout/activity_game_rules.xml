@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".game_rules">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="1dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:fontFamily="monospace"
+            android:gravity="center"
+            android:text="Objective"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#FA2727"
+            android:textStyle="bold"
+            android:typeface="monospace" />
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-black"
+            android:text="The objectives of the non-spy players are to identify the spy and avoid revealing their location.\nThe spy's objective is to listen as carefully as possible to what the other players say and do their best to avoid blowing their cover while also trying to identify the location before the time limit have passed."
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#9E9E9E"
+            android:typeface="normal" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:fontFamily="monospace"
+            android:gravity="center"
+            android:text="Start of round"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#FA2727"
+            android:textStyle="bold"
+            android:typeface="monospace" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#9E9E9E"
+            android:text="At the start as a non-spy you get a screen reviling you the location of the game, and your roll in it.\nAs a spy you get A list of all possible locations"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:fontFamily="monospace"
+            android:gravity="center"
+            android:text="How you play"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#FA2727"
+            android:textStyle="bold"
+            android:typeface="monospace"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#9E9E9E"
+            android:text="Players will take turns asking other players questions about the location you are in.\nAsk anything too vague and people may suspect you, or you might get no useful information, but if you ask anything too specific you risk giving away the location of the spy!\nPlay continues with the person who answered the last question. They ask someone else a question, but it can’t be the person who just asked them."
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:fontFamily="monospace"
+            android:gravity="center"
+            android:text="End of round"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#FA2727"
+            android:textStyle="bold"
+            android:typeface="monospace"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="#9E9E9E"
+            android:text="At any point during the game a player, may accuse someone of being the spy.This initiated a vote and if the majority vote yes then the person reveals role. If they are the spy, everyone else wins. If they are not the spy though, the spy wins.\nRegardless of the result, the round is over.If the majority does not vote yes, then play continues.\nAt any point during the game the spy may reveal and try to guess the location. If they are correct they win.\nWhen the timer end the spy gets a chance to guess the location to win.
+"
+            />
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

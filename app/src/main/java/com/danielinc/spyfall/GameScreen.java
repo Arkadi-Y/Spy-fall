@@ -47,13 +47,13 @@ public class GameScreen extends AppCompatActivity {
     MyCountDownTimer myCountDownTimer;
     Button endRoundBtn;
     String roomCode;
-    int ConfigTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
         setup();
         CRUD.listenToGame(this,this.roomCode);
+        Log.d("Created game", "in game");
     }
     public void startTimer(){
         SharedPreferences sharedPref = this.getApplicationContext().getSharedPreferences(getString(R.string.sharedpref),Context.MODE_PRIVATE);
@@ -163,11 +163,27 @@ public class GameScreen extends AppCompatActivity {
     public void getLocation(String roomCode){
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference locationRef = database.getReference("rooms/"+roomCode+"/location");
-            locationRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            locationRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()){
+                        Log.d("location",snapshot.getValue().toString());//TODO: there was an error here
+                        location=snapshot.getValue().toString();
+                        LocationTxt.setText(location);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+                });
+/*
                 @Override
                 public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    if (!task.getResult().hasChildren()) {
+                    if (!task.getResult().exists()) {
                         Log.e("firebase", "Error getting data", task.getException());
+                        Log.d("firebase",task.getResult().toString());
                     }
                     else {
                         Log.d("location",task.getResult().getValue().toString());//TODO: there was an error here
@@ -175,7 +191,7 @@ public class GameScreen extends AppCompatActivity {
                         LocationTxt.setText(location);
                     }
                 }
-            });
+            });*/
         }
     public void loadLocationList(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -206,7 +222,11 @@ public class GameScreen extends AppCompatActivity {
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                CRUD.removePlayer(player.roomCode,player.name);
+
+                if (host!=null)
+                    host.EndGame();
+                else
+                    CRUD.removePlayer(player.roomCode,player.name);
                 finish();
             }
 

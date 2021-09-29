@@ -188,6 +188,8 @@ public class CRUD {
                              intent.putExtra("Host", lobby.host);
                         else
                              intent.putExtra("Player", lobby.player);
+                        Log.d("GAME OPEN",roomCode);
+                        roomRef.removeEventListener(this);
                         lobby.startActivity(intent);
                         lobby.finish();
                     }
@@ -235,9 +237,11 @@ public class CRUD {
                 return location;
             }
         static void setLobbyListeners(Lobby lobby, String roomCode){
+            listenToConnectingPlayers(lobby,roomCode);
+            roleChangeListener(lobby,roomCode);
            listenToRoom(lobby,roomCode);
-           listenToConnectingPlayers(lobby,roomCode);
-           roleChangeListener(lobby,roomCode);
+
+
         }
         static void changeGameStatus(String roomCode,String status){
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -262,6 +266,8 @@ public class CRUD {
                             intent.putExtra("Host", game.host);
                         else
                             intent.putExtra("Player", game.player);
+                        Log.d("GAME CLOSED",roomCode);
+                        roomRef.removeEventListener(this);
                         game.startActivity(intent);
                         game.finish();
                     }

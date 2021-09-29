@@ -159,7 +159,7 @@ public class Lobby extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     CRUD.removePlayer(player.roomCode,player.name);
-                    quitFunction();
+                    finish();
                 }
             });
         }

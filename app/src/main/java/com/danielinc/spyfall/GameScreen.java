@@ -170,7 +170,7 @@ public class GameScreen extends AppCompatActivity {
                         Log.e("firebase", "Error getting data", task.getException());
                     }
                     else {
-                        Log.d("location",task.getResult().getValue().toString());
+                        Log.d("location",task.getResult().getValue().toString());//TODO: there was an error here
                        location=task.getResult().getValue().toString();
                         LocationTxt.setText(location);
                     }

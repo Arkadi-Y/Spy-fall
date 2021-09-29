@@ -41,6 +41,5 @@
     <!-- start shared preference string -->
     <string name="sharedpref">shared</string>
     <!-- End shared preference string -->
-    <!--TODO: Adding Strings here-->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

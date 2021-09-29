@@ -154,7 +154,6 @@ public class MainLogin extends Fragment {
        if(username.getText().toString().length()>3){
            saveUsername();
            Host host = new Host(username.getText().toString());
-           //TODO: creating server in firebase here
            CRUD.CreateRoom(host.roomCode,host.name,sharedPref.getInt("NumOfPlayers",1),sharedPref.getInt("RoundTime",1));
            intent.putExtra("Host",host);
            startActivity(intent);

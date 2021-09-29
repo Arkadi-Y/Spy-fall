@@ -166,12 +166,12 @@ public class GameScreen extends AppCompatActivity {
             locationRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    if (!task.isSuccessful()) {
+                    if (!task.getResult().hasChildren()) {
                         Log.e("firebase", "Error getting data", task.getException());
                     }
                     else {
                         Log.d("location",task.getResult().getValue().toString());//TODO: there was an error here
-                       location=task.getResult().getValue().toString();
+                        location=task.getResult().getValue().toString();
                         LocationTxt.setText(location);
                     }
                 }

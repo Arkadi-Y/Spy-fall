@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -44,19 +45,18 @@ public class GameScreen extends AppCompatActivity {
     String role,location;
     ArrayList<String> locations;
     MyCountDownTimer myCountDownTimer;
+    Button endRoundBtn;
+    String roomCode;
     int ConfigTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
-
         setup();
-        startTimer();
-
+        CRUD.listenToGame(this,this.roomCode);
     }
     public void startTimer(){
         SharedPreferences sharedPref = this.getApplicationContext().getSharedPreferences(getString(R.string.sharedpref),Context.MODE_PRIVATE);
-
         int CountDown = sharedPref.getInt("CurrentSessionRoundTime",1)*60*1000;
         Log.d("Time-Set" , Integer.toString(CountDown));
         myCountDownTimer = new MyCountDownTimer(CountDown, 1000);
@@ -66,7 +66,6 @@ public class GameScreen extends AppCompatActivity {
         myCountDownTimer.cancel();
     }
     public void setup(){
-
         Timer = findViewById(R.id.Timer);
         PlayerCard = findViewById(R.id.playerCard);
         SpyCard = findViewById(R.id.spyCard);
@@ -78,7 +77,7 @@ public class GameScreen extends AppCompatActivity {
         locations = new ArrayList<>();
         isHost();
         selectView();
-
+        startTimer();
     }
     public void selectView(){
         if (role.equals("Spy")) {
@@ -89,7 +88,6 @@ public class GameScreen extends AppCompatActivity {
             PlayerCard.setVisibility(View.VISIBLE);
         }
     }
-
     public class LocationListAdapter extends BaseAdapter {
          ArrayList<String> items;
         LocationListAdapter() {
@@ -134,7 +132,6 @@ public class GameScreen extends AppCompatActivity {
         adapter.setItems(locations);
         adapter.notifyDataSetChanged();
     }
-
     public void isHost(){
         if(intent.getSerializableExtra("Host")!=null){
             setAdmin();
@@ -148,15 +145,16 @@ public class GameScreen extends AppCompatActivity {
         getLocation(player.roomCode);
         RoleText.setText(player.role);
         LocationTxt.setText(location);
-
+        this.roomCode=player.roomCode;
     }
     public void setAdmin(){
         host = (Host) intent.getSerializableExtra("Host");
         this.role = host.getRole();
         getLocation(host.roomCode);
         RoleText.setText(host.role);
-
-
+        endRoundBtn = findViewById(R.id.EndRoundBtn);
+        endRoundBtn.setVisibility(View.VISIBLE);
+        this.roomCode = host.roomCode;
     }
     public void getLocation(String roomCode){
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -193,7 +191,9 @@ public class GameScreen extends AppCompatActivity {
         });
 
     }
-
+    public void endRound(){
+        CRUD.changeGameStatus(host.roomCode,"Lobby");
+    }
     @Override
     public void onBackPressed() {
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
@@ -202,6 +202,7 @@ public class GameScreen extends AppCompatActivity {
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
                 finish();
             }
 
@@ -214,7 +215,6 @@ public class GameScreen extends AppCompatActivity {
         }).show();
     }
     public class MyCountDownTimer extends CountDownTimer {
-
         public MyCountDownTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
@@ -227,7 +227,7 @@ public class GameScreen extends AppCompatActivity {
 
         @Override
         public void onFinish() {
-            finish();
+            CRUD.changeGameStatus(host.roomCode,"Lobby");
         }
 
     }

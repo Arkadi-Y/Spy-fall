@@ -50,27 +50,6 @@ public class CRUD {
                 }
             });
         }
-        static boolean roomExists(String roomCode) {
-            final boolean[] exists = {false};
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference roomRef = database.getReference("/rooms");;
-            roomRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-                    for(DataSnapshot data: snapshot.getChildren()){
-                        if (data.getKey().equals(roomCode)) {
-                            exists[0]=true;
-                            Log.d("connect","connected");
-                        }
-                    }
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    throw error.toException();
-                }
-            });
-            return exists[0];
-        }
         static Set<String> getLocationList() {
             Set<String> locations=new HashSet<String>();
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -88,30 +67,6 @@ public class CRUD {
                 }
             });
             return locations;
-        }
-        //booleans dont work
-        static boolean isConnected(String name){
-            final boolean[] exists = {false};
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference roomRef = database.getReference("/rooms");;
-            roomRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-                    for(DataSnapshot data: snapshot.getChildren()){
-                        if (data.getKey().equals(name)) {
-                            exists[0]=true;
-                            Log.d("connect","connected");
-                        } else {
-                            //do something iCf not exists
-                        }
-                    }
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    throw error.toException();
-                }
-            });
-            return exists[0];
         }
         static void UpdatePlayerRole(ArrayList<Player> playerList,String roomCode){
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -197,7 +152,7 @@ public class CRUD {
                 }
             });
         }
-    static void listenToConnectingPlayers(Lobby lobby,String roomCode) {
+        static void listenToConnectingPlayers(Lobby lobby,String roomCode) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference playerRef = database.getReference("rooms/" + roomCode + "/players");
         playerRef.addValueEventListener(new ValueEventListener() {
@@ -286,8 +241,33 @@ public class CRUD {
             DatabaseReference roomRef = database.getReference("rooms/"+roomCode);
             roomRef.child("status").setValue(status);
         }
-            static void setGameListeners(){}
-}
+        static void setGameListeners(){}
+        static void listenToGame(GameScreen game,String roomCode){
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference roomRef = database.getReference("rooms/" + roomCode);
+            roomRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(!snapshot.hasChildren())
+                        game.finish();
+                    //set room closed message;
+                    if(snapshot.child("status").getValue().toString().equals("Lobby")){
+                        Intent intent = new Intent(game.getApplicationContext(), Lobby.class);
+                        if (game.host!=null)
+                            intent.putExtra("Host", game.host);
+                        else
+                            intent.putExtra("Player", game.player);
+                        game.startActivity(intent);
+                        game.finish();
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+    }
 /*
     // Write a message to the database
     FirebaseDatabase database = FirebaseDatabase.getInstance();

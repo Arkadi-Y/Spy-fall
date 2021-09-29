@@ -104,8 +104,6 @@ public class Lobby extends AppCompatActivity {
             setPlayer();
         }
     }
-
-
     public void setPlayer(){
         player= (Player) intent.getSerializableExtra("Player");
         UNlbl.setText(getString(R.string.hostname)+" "+player.name);
@@ -177,10 +175,6 @@ public class Lobby extends AppCompatActivity {
     public void setPlayerList(ArrayList<Player>list){
         this.playerList=list;
     }
-
-
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -197,16 +191,17 @@ public class Lobby extends AppCompatActivity {
     Boolean flag=true;
     @Override
     public void onBackPressed() {
-        if(host!=null){
             AlertDialog.Builder builder=new AlertDialog.Builder(this);
             builder.setTitle("Confirmation");
             builder.setMessage("Are you sure you want to quit");
             builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-
+                    if (host!=null)
                         host.EndGame();
-                        finish();
+                    else
+                        CRUD.removePlayer(player.roomCode,player.name);
+                    finish();
                     }
 
             });
@@ -216,13 +211,7 @@ public class Lobby extends AppCompatActivity {
 
                 }
             }).show();
-        }
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.d("Restart ","Reboot!!!");
 
     }
+
 }

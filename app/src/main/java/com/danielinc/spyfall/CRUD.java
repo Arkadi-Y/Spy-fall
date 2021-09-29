@@ -1,7 +1,9 @@
 package com.danielinc.spyfall;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,9 +26,9 @@ public class CRUD {
             roomRef.child("config").child("max-players").setValue(maxPlayers);
             roomRef.child("config").child("round-time").setValue(roundTime);
             roomRef.child("location").setValue("null");
+            roomRef.child("status").setValue("lobby");
             roomRef.child("players").child(host).setValue("null");
         }
-
         static void ConnectPlayer(String roomCode,String playerName){
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference playerListRef = database.getReference("rooms/"+roomCode+"/players");
@@ -176,42 +178,115 @@ public class CRUD {
             return playerList;
 
         }
-        public static void roleChangeListener(Player player, String code){
+        static void roleChangeListener(Lobby lobby, String code){
             FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference playerRef = database.getReference("rooms/" + code + "/players/"+player.name);
+            DatabaseReference playerRef = database.getReference("/rooms/" + code + "/players");
             playerRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for(DataSnapshot roleSnap : snapshot.getChildren()){
-                        if (roleSnap.getKey().equals(player.name)){
-                             player.setRole(roleSnap.getValue().toString());
-                             Log.d("changed",roleSnap.getValue().toString());
+                    for(DataSnapshot data: snapshot.getChildren()) {
+                         if (data.getKey().equals(lobby.player.name)) {
+                            lobby.player.setRole(data.getValue().toString());
                         }
                     }
                 }
+
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     throw error.toException();
                 }
             });
         }
+    static void listenToConnectingPlayers(Lobby lobby,String roomCode) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference playerRef = database.getReference("rooms/" + roomCode + "/players");
+        playerRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Player>newList=new ArrayList<>();
+                for(DataSnapshot roleSnap : snapshot.getChildren()){
+                    Log.d("connected",roleSnap.getKey());
+                    newList.add(new Player(roleSnap.getKey(),roomCode));
+                }
+                lobby.setPlayerList(newList);
+                lobby.setList();
+                lobby.reSetList();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                throw error.toException();
+            }
+        });
+    }
+        static void listenToRoom(Lobby lobby,String roomCode){
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference roomRef = database.getReference("rooms/" + roomCode);
+            roomRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if(!snapshot.hasChildren())
+                        lobby.quitFunction();
+                    if(snapshot.child("status").getValue().toString().equals("Game")){
+                        Intent intent = new Intent(lobby.getApplicationContext(), GameScreen.class);
+                        intent.putExtra("Player", lobby.player);
+                        lobby.startActivity(intent);
+                    }
+
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+        static void addTimerListener(Lobby lobby,String roomCode) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference locationRef = database.getReference("rooms/" + roomCode + "/config");
+        locationRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                SharedPreferences sharedPref = lobby.getApplication().getApplicationContext().getSharedPreferences(lobby.getString(R.string.sharedpref), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                if(dataSnapshot.child("round-time").getValue()!=null){
+                    editor.putInt("CurrentSessionRoundTime",Integer.parseInt(dataSnapshot.child("round-time").getValue().toString())).commit();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w( "loadPost:onCancelled", databaseError.toException());
+            }
+        });
+    }
         static void setLocation(String roomCode,String location){
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference roomRef = database.getReference("rooms/" + roomCode+"/location");
-            roomRef.setValue(location);
-        }
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference roomRef = database.getReference("rooms/" + roomCode+"/location");
+                roomRef.setValue(location);
+            }
         static void closeRoom(Host host){
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference roomRef = database.getReference("rooms/" + host.roomCode);
-            roomRef.removeValue();
-        }
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference roomRef = database.getReference("rooms/" + host.roomCode);
+                roomRef.removeValue();
+            }
         static String getRoomLocation(String roomCode){
-            String location;
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference locationRef = database.getReference("/rooms"+roomCode+"/location");
-            location = locationRef.toString();
-            return location;
+                String location;
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference locationRef = database.getReference("/rooms"+roomCode+"/location");
+                location = locationRef.toString();
+                return location;
+            }
+        static void setLobbyListeners(Lobby lobby, String roomCode){
+           listenToRoom(lobby,roomCode);
+           listenToConnectingPlayers(lobby,roomCode);
+           roleChangeListener(lobby,roomCode);
         }
+        static void changeGameStatus(String roomCode,String status){
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference roomRef = database.getReference("rooms/"+roomCode);
+            roomRef.child("status").setValue(status);
+        }
+            static void setGameListeners(){}
 }
 /*
     // Write a message to the database

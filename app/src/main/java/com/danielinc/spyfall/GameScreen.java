@@ -155,7 +155,7 @@ public class GameScreen extends AppCompatActivity {
         this.role = host.getRole();
         getLocation(host.roomCode);
         RoleText.setText(host.role);
-        LocationTxt.setText(location);
+
 
     }
     public void getLocation(String roomCode){
@@ -168,7 +168,9 @@ public class GameScreen extends AppCompatActivity {
                         Log.e("firebase", "Error getting data", task.getException());
                     }
                     else {
-                       location=task.getResult().toString();
+                        Log.d("location",task.getResult().getValue().toString());
+                       location=task.getResult().getValue().toString();
+                        LocationTxt.setText(location);
                     }
                 }
             });

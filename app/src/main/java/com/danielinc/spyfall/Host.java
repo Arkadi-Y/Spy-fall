@@ -49,20 +49,15 @@ public class Host implements Serializable {
             if (p.role==null){
                 int index = r.nextInt(this.roles.size());
                 p.setRole((String) this.roles.get(index));
+                if(p.getName().equals(this.name)){
+                    this.role=p.getRole();
+                }
                 this.roles.remove(index);
             }
         }
         setSpy(playerList);
-        setHostRole(playerList);
     };
-    public void setHostRole(ArrayList<Player> playerList){
-        for (Player p: playerList){
-            if(p.getName().equals(this.name)){
-                this.role=p.getRole();
-            }
-        }
 
-    }
 
     public void ReSetRoles(ArrayList<Player> playerList){
         for (Player p: playerList){

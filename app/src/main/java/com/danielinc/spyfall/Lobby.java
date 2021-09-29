@@ -36,7 +36,8 @@ public class Lobby extends AppCompatActivity {
     Intent intent;
     Player player;
     Host host;
-    String userName;
+    String roomCode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +46,8 @@ public class Lobby extends AppCompatActivity {
         playerList=new ArrayList<>();
         setItems();
         isHost();
-        getTime();
         setList();
+        CRUD.setLobbyListeners(this,this.roomCode);
     }
     public class MyAdapter extends BaseAdapter {
         ArrayList<Player> items;
@@ -103,46 +104,20 @@ public class Lobby extends AppCompatActivity {
             setPlayer();
         }
     }
-    public void getTime(){
-        if(host==null){
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference locationRef = database.getReference("rooms/" + player.roomCode + "/config");
-            addPostEventListener(locationRef);
-        }
-        else{
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            DatabaseReference locationRef = database.getReference("rooms/" + host.roomCode + "/config");
-            addPostEventListener(locationRef);
-        }
-    }
-    private void addPostEventListener(DatabaseReference mPostReference) {
-        ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                SharedPreferences sharedPref = getApplication().getApplicationContext().getSharedPreferences(getString(R.string.sharedpref),Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                if(dataSnapshot.child("round-time").getValue()!=null){
-                    editor.putInt("CurrentSessionRoundTime",Integer.parseInt(dataSnapshot.child("round-time").getValue().toString())).commit();
-                }
 
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w( "loadPost:onCancelled", databaseError.toException());
-            }
-        };
-        mPostReference.addValueEventListener(postListener);
-    }
+
     public void setPlayer(){
         player= (Player) intent.getSerializableExtra("Player");
         UNlbl.setText(getString(R.string.hostname)+" "+player.name);
-        servCode.setText(getString(R.string.servercode)+" "+player.roomCode);
+        roomCode = player.roomCode;
+        servCode.setText(getString(R.string.servercode)+" "+roomCode);
         setListeners();
     }
     public void setAdmin(){
         host = (Host) intent.getSerializableExtra("Host");
+        player = new Player(host.name,host.roomCode);
         host.LoadGame();
+        roomCode=host.roomCode;
         UNlbl.setText(getString(R.string.hostname)+" "+host.name);
         servCode.setText(getString(R.string.servercode)+" "+host.roomCode);
         setHostListeners();
@@ -152,7 +127,6 @@ public class Lobby extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
     public void setHostListeners(){
-        listenToConnectingPlayers(host.roomCode);
         PlayerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -174,12 +148,12 @@ public class Lobby extends AppCompatActivity {
                 builder.setMessage("No players are connected");
                 builder.show();
             }else{
-            Intent intent = new Intent(this.getApplicationContext(),GameScreen.class);
-            host.newRound(this.playerList);
-            CRUD.UpdatePlayerRole(this.playerList,host.roomCode);
-            CRUD.setLocation(host.roomCode,host.location);
-            intent.putExtra("Host",host);
-            startActivity(intent);}
+                host.newRound(this.playerList);
+                CRUD.UpdatePlayerRole(this.playerList,host.roomCode);
+                CRUD.setLocation(host.roomCode,host.location);
+                intent.putExtra("Host",host);
+                CRUD.changeGameStatus(this.roomCode,"Game");
+                }
         });
     }
     public void setListeners(){
@@ -190,9 +164,6 @@ public class Lobby extends AppCompatActivity {
                     quitFunction();
                 }
             });
-        listenToConnectingPlayers(player.roomCode);
-        listenToRoom(player.roomCode);
-        listenToRoleChange(player.roomCode);
         }
     public void quitFunction(){
          finish();
@@ -206,69 +177,9 @@ public class Lobby extends AppCompatActivity {
     public void setPlayerList(ArrayList<Player>list){
         this.playerList=list;
     }
-    void listenToRoom(String roomCode){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference roomRef = database.getReference("rooms/" + roomCode);
-        roomRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.hasChildren())
-                    quitFunction();
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
-    }
-    void listenToConnectingPlayers(String roomCode) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference playerRef = database.getReference("rooms/" + roomCode + "/players");
-        playerRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<Player>newList=new ArrayList<>();
-                for(DataSnapshot roleSnap : snapshot.getChildren()){
-                    Log.d("connected",roleSnap.getKey());
-                    newList.add(new Player(roleSnap.getKey(),roomCode));
-                }
-                setPlayerList(newList);
-                setList();
-                reSetList();
 
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                throw error.toException();
-            }
-        });
-    }
-    void listenToRoleChange(String roomCode){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference playerRef = database.getReference("/rooms/" + roomCode + "/players");
-        playerRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                 for(DataSnapshot data: snapshot.getChildren()) {
-                     Log.d("snapshot",data.getKey() +" VS "+player.name);
-                     if (data.getKey().equals(player.name)&&!data.getValue().toString().equals("null")) {
-                         Log.d("in if",data.getKey() +" VS "+player.name);
-                         Intent intent = new Intent(getApplicationContext(), GameScreen.class);
-                         player.setRole(data.getValue().toString());
-                         intent.putExtra("Player", player);
-                         Log.d("changed", data.getValue().toString());
-                         startActivity(intent);
-                     }
-                 }
-                }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                throw error.toException();
-            }
-        });
-    }
 
     @Override
     protected void onDestroy() {

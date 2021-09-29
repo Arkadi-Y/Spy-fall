@@ -49,11 +49,14 @@ public class GameScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
+
         setup();
         startTimer();
+
     }
     public void startTimer(){
         SharedPreferences sharedPref = this.getApplicationContext().getSharedPreferences(getString(R.string.sharedpref),Context.MODE_PRIVATE);
+
         int CountDown = sharedPref.getInt("CurrentSessionRoundTime",1)*60*1000;
         Log.d("Time-Set" , Integer.toString(CountDown));
         myCountDownTimer = new MyCountDownTimer(CountDown, 1000);
@@ -197,9 +200,6 @@ public class GameScreen extends AppCompatActivity {
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if(host!=null){
-                    CRUD.UpdateRoomGameStop(host.roomCode);
-                }
                 finish();
             }
 

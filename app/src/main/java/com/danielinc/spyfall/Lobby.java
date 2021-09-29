@@ -179,7 +179,6 @@ public class Lobby extends AppCompatActivity {
             CRUD.UpdatePlayerRole(this.playerList,host.roomCode);
             CRUD.setLocation(host.roomCode,host.location);
             intent.putExtra("Host",host);
-            CRUD.UpdateRoomGameStart(host.roomCode);
             startActivity(intent);}
         });
     }

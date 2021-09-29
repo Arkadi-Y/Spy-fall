@@ -10,12 +10,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center">
+        <Button
+            android:id="@+id/EndRoundBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="End round"
+            android:layout_marginRight="70dp"
+            android:visibility="gone"
+            >
+        </Button>
         <TextView
             android:id="@+id/Timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="50dp"
             android:text="00:00"/>
+
     </LinearLayout>
     <LinearLayout
         android:id="@+id/playerCard"
@@ -69,15 +79,5 @@
             android:layout_height="wrap_content"
             android:id="@+id/LocationList"/>
     </LinearLayout>
-    <Button
-        android:id="@+id/EndRoundBtn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="End round"
-        android:layout_marginTop="200dp"
-        android:visibility="gone"
-        >
 
-
-    </Button>
 </LinearLayout>

@@ -178,9 +178,6 @@ public class Lobby extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(host!=null){
-            host.EndGame();
-        }
     }
 
     @Override

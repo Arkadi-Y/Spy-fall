@@ -182,12 +182,15 @@ public class CRUD {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if(!snapshot.hasChildren())
                         lobby.quitFunction();
-                    if(snapshot.child("status").getValue().toString().equals("Game")){
+                    if(snapshot.hasChild("status")&&snapshot.child("status").getValue().toString().equals("Game")){
                         Intent intent = new Intent(lobby.getApplicationContext(), GameScreen.class);
-                        intent.putExtra("Player", lobby.player);
+                        if (lobby.host!=null)
+                             intent.putExtra("Host", lobby.host);
+                        else
+                             intent.putExtra("Player", lobby.player);
                         lobby.startActivity(intent);
+                        lobby.finish();
                     }
-
                 }
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
@@ -196,23 +199,23 @@ public class CRUD {
             });
         }
         static void addTimerListener(Lobby lobby,String roomCode) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference locationRef = database.getReference("rooms/" + roomCode + "/config");
-        locationRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                SharedPreferences sharedPref = lobby.getApplication().getApplicationContext().getSharedPreferences(lobby.getString(R.string.sharedpref), Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                if(dataSnapshot.child("round-time").getValue()!=null){
-                    editor.putInt("CurrentSessionRoundTime",Integer.parseInt(dataSnapshot.child("round-time").getValue().toString())).commit();
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference locationRef = database.getReference("rooms/" + roomCode + "/config");
+            locationRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    SharedPreferences sharedPref = lobby.getApplication().getApplicationContext().getSharedPreferences(lobby.getString(R.string.sharedpref), Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    if(dataSnapshot.child("round-time").getValue()!=null){
+                        editor.putInt("CurrentSessionRoundTime",Integer.parseInt(dataSnapshot.child("round-time").getValue().toString())).commit();
+                    }
                 }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w( "loadPost:onCancelled", databaseError.toException());
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Getting Post failed, log a message
+                    Log.w( "loadPost:onCancelled", databaseError.toException());
+                }
+            });
     }
         static void setLocation(String roomCode,String location){
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -248,10 +251,12 @@ public class CRUD {
             roomRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if(!snapshot.hasChildren())
+                    if(!snapshot.hasChildren()) {
+                        Log.d("no children",roomCode);
                         game.finish();
+                    }
                     //set room closed message;
-                    if(snapshot.child("status").getValue().toString().equals("Lobby")){
+                    if(snapshot.hasChild("status")&&snapshot.child("status").getValue().toString().equals("Lobby")){
                         Intent intent = new Intent(game.getApplicationContext(), Lobby.class);
                         if (game.host!=null)
                             intent.putExtra("Host", game.host);

@@ -73,6 +73,7 @@ public class GameScreen extends AppCompatActivity {
         LocationTxt = findViewById(R.id.LocationTxt);
         RoleText = findViewById(R.id.RoleTxt);
         LocationListView = findViewById(R.id.LocationList);
+        endRoundBtn = findViewById(R.id.EndRoundBtn);
         adapter = new LocationListAdapter();
         locations = new ArrayList<>();
         isHost();
@@ -135,6 +136,7 @@ public class GameScreen extends AppCompatActivity {
     public void isHost(){
         if(intent.getSerializableExtra("Host")!=null){
             setAdmin();
+            Log.d("admin","admin");
         }else{
             setPlayer();
         }
@@ -152,9 +154,11 @@ public class GameScreen extends AppCompatActivity {
         this.role = host.getRole();
         getLocation(host.roomCode);
         RoleText.setText(host.role);
-        endRoundBtn = findViewById(R.id.EndRoundBtn);
         endRoundBtn.setVisibility(View.VISIBLE);
         this.roomCode = host.roomCode;
+        endRoundBtn.setOnClickListener(v->{
+            endRound();
+        });
     }
     public void getLocation(String roomCode){
             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -198,11 +202,11 @@ public class GameScreen extends AppCompatActivity {
     public void onBackPressed() {
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
         builder.setTitle("Confirmation");
-        builder.setMessage("Are you sure you want to Exit?");
+        builder.setMessage("Are you sure you want to Exit?\nYou will leave the lobby.");
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
+                CRUD.removePlayer(player.roomCode,player.name);
                 finish();
             }
 

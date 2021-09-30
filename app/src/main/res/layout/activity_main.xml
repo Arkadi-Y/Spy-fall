@@ -10,21 +10,45 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:id="@+id/TopMenu">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:layout_height="60dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
             <Button
                 android:id="@+id/config"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/config"/>
+                style="@android:style/Widget.Material.Light.Button.Borderless.Colored"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:visibility="visible"
+                app:icon="@android:drawable/ic_menu_preferences"
+                app:iconPadding="10dp"
+                app:iconTint="#DFDBDB"
+                tools:ignore="SpeakableTextPresentCheck" />
+
             <Button
                 android:id="@+id/mainWindow"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/back" />
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:text="@string/back"
+                android:visibility="gone"
+                app:icon="@android:drawable/ic_menu_close_clear_cancel"
+                app:iconTint="#F8E6E6" />
+
+            <Button
+                android:id="@+id/RulesBtn"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:layout_marginRight="60dp"
+                app:icon="@android:drawable/ic_dialog_info" />
+
         </LinearLayout>
     </RelativeLayout>
     <FrameLayout

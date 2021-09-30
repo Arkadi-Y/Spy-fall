@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,42 +20,42 @@
 
             <Button
                 android:id="@+id/config"
+                app:icon="@android:drawable/ic_menu_preferences"
+                app:iconPadding="10dp"
+                app:iconTint="#DFDBDB"
                 style="@android:style/Widget.Material.Light.Button.Borderless.Colored"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"/>
+
+            <Button
+                android:id="@+id/Rules"
+                android:layout_marginLeft="12.5dp"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="left"
                 android:visibility="visible"
-                app:icon="@android:drawable/ic_menu_preferences"
-                app:iconPadding="10dp"
-                app:iconTint="#DFDBDB"
-                tools:ignore="SpeakableTextPresentCheck" />
+                tools:ignore="SpeakableTextPresentCheck"
+                style="@android:style/Widget.Material.Light.Button.Borderless.Colored"
+                app:icon="@android:drawable/ic_dialog_info"/>
 
             <Button
                 android:id="@+id/mainWindow"
+                android:layout_marginLeft="12.5dp"
                 style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="left"
-                android:text="@string/back"
-                android:visibility="gone"
                 app:icon="@android:drawable/ic_menu_close_clear_cancel"
-                app:iconTint="#F8E6E6" />
-
-            <Button
-                android:id="@+id/RulesBtn"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:layout_marginRight="60dp"
-                app:icon="@android:drawable/ic_dialog_info" />
+                app:iconTint="#F8E6E6"
+                />
 
         </LinearLayout>
     </RelativeLayout>
+
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/TopMenu"/>
+        android:layout_below="@+id/TopMenu" />
 
 </RelativeLayout>

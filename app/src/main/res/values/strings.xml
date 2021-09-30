@@ -25,8 +25,9 @@
     <string name="Vote">Vote</string>
     <string name="Start">Start</string>
     <string name="Spy">You are the Spy</string>
-
+    <string name="Rules">rules</string>
     <string name="sample">sample</string>
+    <string name="Login">Login</string>
 
     <string-array name="min">
         <item>6:00</item>
